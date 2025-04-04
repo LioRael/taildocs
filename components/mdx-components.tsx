@@ -1,6 +1,14 @@
 import { Anchor } from "./mdx/anchor"
 import { CodeBlock, Pre } from "./mdx/codeblock"
 import { Heading } from "./mdx/heading"
+import {
+  Step,
+  StepContent,
+  StepDescription,
+  Steps,
+  StepTitle,
+} from "./mdx/step"
+import { Tab, Tabs } from "./mdx/tab"
 
 import type { motion } from "motion/react"
 import type { HTMLAttributes } from "react"
@@ -42,5 +50,20 @@ export const mdxComponents = {
 
   h6: (props: React.ComponentProps<typeof Heading>) => (
     <Heading as="h6" {...props} />
+  ),
+
+  Tabs: (props: React.ComponentProps<typeof Tabs>) => <Tabs {...props} />,
+  Tab: (props: React.ComponentProps<typeof Tab>) => <Tab {...props} />,
+
+  Steps: (props: React.ComponentProps<typeof Steps>) => <Steps {...props} />,
+  Step: (props: React.ComponentProps<typeof Step>) => <Step {...props} />,
+  StepTitle: (props: React.ComponentProps<typeof StepTitle>) => (
+    <StepTitle {...props} />
+  ),
+  StepDescription: (props: React.ComponentProps<typeof StepDescription>) => (
+    <StepDescription {...props} />
+  ),
+  StepContent: (props: React.ComponentProps<typeof StepContent>) => (
+    <StepContent {...props} />
   ),
 }
