@@ -4,7 +4,7 @@
     "foreground": "var(--color-slate-400)",
     "descriptionForeground": "var(--color-slate-200)",
     "errorForeground": "var(--color-rose-400)",
-    "selection.background": "color-mix(in oklab, var(--color-primary-200) 64%, transparent)",
+    "selection.background": "color-mix(in oklab, var(--color-blue-200) 64%, transparent)",
     "focusBorder": "var(--color-primary-500)",
     "icon.foreground": "var(--color-slate-50)",
     "widget.shadow": "color-mix(in oklab, var(--color-black) 25%, transparent)",
@@ -22,7 +22,7 @@
     "toolbar.activeBackground": "color-mix(in oklab, var(--color-slate-300) 20%, transparent)",
     "debugToolBar.background": "var(--color-slate-700)",
     "debugIcon.startForeground": "var(--color-emerald-400)",
-    "debugIcon.pauseForeground": "var(--color-primary-400)",
+    "debugIcon.pauseForeground": "var(--color-blue-400)",
     "debugIcon.stopForeground": "var(--color-rose-400)",
     "debugIcon.restartForeground": "var(--color-emerald-400)",
     "debugIcon.stepOverForeground": "var(--color-violet-400)",
@@ -31,7 +31,7 @@
     "debugIcon.continueForeground": "var(--color-violet-400)",
     "debugIcon.stepBackForeground": "var(--color-violet-400)",
     "debugIcon.breakpointForeground": "var(--color-rose-400)",
-    "debugConsole.infoForeground": "var(--color-primary-400)",
+    "debugConsole.infoForeground": "var(--color-blue-400)",
     "debugConsole.warningForeground": "var(--color-amber-300)",
     "debugConsole.errorForeground": "var(--color-rose-400)",
     "activityBar.background": "var(--color-slate-800)",
@@ -130,7 +130,7 @@
     "editorOverviewRuler.findMatchForeground": "var(--color-violet-400)",
     "editorOverviewRuler.addedForeground": "var(--color-emerald-600)",
     "editorOverviewRuler.deletedForeground": "var(--color-rose-700)",
-    "editorOverviewRuler.modifiedForeground": "var(--color-primary-500)",
+    "editorOverviewRuler.modifiedForeground": "var(--color-blue-500)",
     "editor.background": "transparent",
     "editorPane.background": "var(--color-slate-800)",
     "editor.foreground": "var(--color-slate-50)",
@@ -155,11 +155,11 @@
     "editorError.background": "color-mix(in oklab, var(--color-rose-400) 25%, transparent)",
     "editorWarning.foreground": "var(--color-amber-300)",
     "editorWarning.background": "color-mix(in oklab, var(--color-amber-300) 25%, transparent)",
-    "editorInfo.foreground": "var(--color-primary-400)",
-    "editorInfo.background": "color-mix(in oklab, var(--color-primary-400) 40%, transparent)",
+    "editorInfo.foreground": "var(--color-blue-400)",
+    "editorInfo.background": "color-mix(in oklab, var(--color-blue-400) 40%, transparent)",
     "editorGutter.addedBackground": "var(--color-emerald-400)",
     "editorGutter.deletedBackground": "var(--color-rose-400)",
-    "editorGutter.modifiedBackground": "var(--color-primary-400)",
+    "editorGutter.modifiedBackground": "var(--color-blue-400)",
     "diffEditor.insertedLineBackground": "color-mix(in oklab, var(--color-emerald-400) 25%, transparent)",
     "diffEditor.insertedTextBackground": "color-mix(in oklab, var(--color-emerald-400) 25%, transparent)",
     "diffEditor.removedTextBackground": "color-mix(in oklab, var(--color-rose-400) 25%, transparent)",
@@ -167,7 +167,7 @@
     "diffEditorOverview.insertedForeground": "var(--color-emerald-600)",
     "diffEditorOverview.removedForeground": "var(--color-rose-700)",
     "editorLightBulb.foreground": "var(--color-amber-300)",
-    "editorLightBulbAutoFix.foreground": "var(--color-primary-400)",
+    "editorLightBulbAutoFix.foreground": "var(--color-blue-400)",
     "peekViewEditorGutter.background": "var(--color-slate-800)",
     "peekViewEditor.background": "var(--color-slate-800)",
     "peekViewResult.background": "var(--color-slate-800)",
@@ -198,8 +198,8 @@
     "gitDecoration.addedResourceForeground": "var(--color-emerald-400)",
     "gitDecoration.deletedResourceForeground": "var(--color-rose-400)",
     "gitDecoration.renamedResourceForeground": "var(--color-violet-400)",
-    "gitDecoration.modifiedResourceForeground": "var(--color-primary-400)",
-    "gitDecoration.stageModifiedResourceForeground": "var(--color-primary-400)",
+    "gitDecoration.modifiedResourceForeground": "var(--color-blue-400)",
+    "gitDecoration.stageModifiedResourceForeground": "var(--color-blue-400)",
     "gitDecoration.stageDeletedResourceForeground": "var(--color-rose-400)",
     "gitDecoration.untrackedResourceForeground": "var(--color-emerald-400)",
     "gitDecoration.ignoredResourceForeground": "var(--color-slate-400)",
@@ -214,8 +214,8 @@
     "terminal.ansiBrightBlack": "var(--color-slate-400)",
     "terminal.ansiWhite": "var(--color-slate-300)",
     "terminal.ansiBrightWhite": "var(-color-white)",
-    "terminal.ansiBlue": "var(--color-primary-500)",
-    "terminal.ansiBrightBlue": "var(--color-primary-400)",
+    "terminal.ansiBlue": "var(--color-blue-500)",
+    "terminal.ansiBrightBlue": "var(--color-blue-400)",
     "terminal.ansiCyan": "var(--color-cyan-400)",
     "terminal.ansiBrightCyan": "var(--color-cyan-300)",
     "terminal.ansiGreen": "var(--color-emerald-400)",
@@ -371,7 +371,7 @@
         "text.html meta.tag.sgml punctuation"
       ],
       "settings": {
-        "foreground": "color-mix(in oklab, var(--color-primary-300) 75%, transparent)"
+        "foreground": "color-mix(in oklab, var(--color-blue-300) 75%, transparent)"
       }
     },
     {
@@ -449,7 +449,7 @@
       "name": "[CSS] - Function - eg. var(), rgba()",
       "scope": ["source.css support.function"],
       "settings": {
-        "foreground": "var(--color-primary-200)"
+        "foreground": "var(--color-blue-200)"
       }
     },
     {
