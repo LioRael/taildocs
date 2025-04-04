@@ -4,7 +4,10 @@ import {
   createMetaSchema,
   transformMDX,
 } from "@fumadocs/content-collections/configuration"
+import { rehypeCode } from "fumadocs-core/mdx-plugins"
 import { z } from "zod"
+
+import theme from "@/components/syntax-highlighter/theme.json"
 
 const docs = defineCollection({
   name: "docs",
@@ -17,7 +20,20 @@ const docs = defineCollection({
       slogan: z.string().optional(),
     }
   },
-  transform: transformMDX,
+  transform: (document, context) =>
+    transformMDX(document, context, {
+      rehypePlugins: [
+        [
+          rehypeCode,
+          {
+            themes: {
+              light: theme,
+              dark: theme,
+            },
+          },
+        ],
+      ],
+    }),
 })
 
 const metas = defineCollection({
