@@ -5,7 +5,7 @@ import { ProseWrapper } from "@/components/layout/wrapper"
 import { mdxComponents } from "@/components/mdx-components"
 import { source } from "@/lib/source"
 
-import { convertTreeToGroups } from "../layout"
+import { convertTreeToGroups } from "../utils"
 
 import type { Metadata } from "next"
 
