@@ -1,54 +1,61 @@
-import { source } from '@/lib/source';
-import type { Metadata } from 'next';
-import {
-  DocsPage,
-  DocsBody,
-  DocsTitle,
-  DocsDescription,
-} from 'fumadocs-ui/page';
-import { notFound } from 'next/navigation';
-import { MDXContent } from '@content-collections/mdx/react';
-import defaultMdxComponents, { createRelativeLink } from 'fumadocs-ui/mdx';
+import { MDXContent } from "@content-collections/mdx/react"
+import { notFound, redirect } from "next/navigation"
+
+import { ProseWrapper } from "@/components/layout/wrapper"
+import { mdxComponents } from "@/components/mdx-components"
+import { source } from "@/lib/source"
+
+import { convertTreeToGroups } from "../layout"
+
+import type { Metadata } from "next"
 
 export default async function Page(props: {
-  params: Promise<{ slug?: string[] }>;
+  params: Promise<{ slug?: Array<string> }>
 }) {
-  const params = await props.params;
-  const page = source.getPage(params.slug);
-  if (!page) notFound();
+  const params = await props.params
+  if (params.slug === undefined) {
+    const entry = source.pageTree.children[0]
+    throw redirect(`/docs/${entry.$id}`)
+  }
+  const page = source.getPage(params.slug)
+  if (!page) notFound()
+
+  const groups = convertTreeToGroups(source.pageTree)
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
-      <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
-      <DocsBody>
-        <MDXContent
-          code={page.data.body}
-          components={{
-            ...defaultMdxComponents,
-            // this allows you to link to other pages with relative file paths
-            a: createRelativeLink(source, page),
-            // you can add other MDX components here
-          }}
-        />
-      </DocsBody>
-    </DocsPage>
-  );
+    <ProseWrapper toc={!page.data.full ? page.data.toc : undefined}>
+      <p className="flex items-center gap-2 font-mono text-xs/6 font-medium tracking-widest text-gray-600 uppercase dark:text-gray-400">
+        {page.data.slogan ??
+          groups.find((group) =>
+            group.items.some((item) => item.href === page.url)
+          )?.label}
+      </p>
+      <h1 className="mt-2 text-3xl font-medium tracking-tight text-gray-950 dark:text-white">
+        {page.data.title}
+      </h1>
+      <p className="mt-6 text-base/7 whitespace-pre-line text-gray-700 dark:text-gray-400">
+        {page.data.description}
+      </p>
+      <div className="prose mt-10">
+        <MDXContent components={mdxComponents} code={page.data.body} />
+      </div>
+    </ProseWrapper>
+  )
 }
 
 export function generateStaticParams() {
-  return source.generateParams();
+  return source.generateParams()
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>;
+  params: Promise<{ slug?: Array<string> }>
 }) {
-  const params = await props.params;
-  const page = source.getPage(params.slug);
-  if (!page) notFound();
+  const params = await props.params
+  const page = source.getPage(params.slug)
+  if (!page) notFound()
 
   return {
     title: page.data.title,
     description: page.data.description,
-  } satisfies Metadata;
+  } satisfies Metadata
 }

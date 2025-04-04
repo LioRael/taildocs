@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
-import { HomeLayout } from 'fumadocs-ui/layouts/home';
-import { baseOptions } from '@/app/layout.config';
+import React from "react"
 
-export default function Layout({ children }: { children: ReactNode }) {
-  return <HomeLayout {...baseOptions}>{children}</HomeLayout>;
+import { Wrapper } from "@/components/layout/wrapper"
+
+export default function Layout({ children }: React.PropsWithChildren) {
+  return <Wrapper>{children}</Wrapper>
 }
