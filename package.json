@@ -1,0 +1,33 @@
+{
+  "name": "taildocs-next",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "15.2.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "fumadocs-ui": "15.2.3",
+    "fumadocs-core": "15.2.3",
+    "@content-collections/mdx": "^0.2.2",
+    "@content-collections/core": "^0.8.2",
+    "@content-collections/next": "^0.2.6",
+    "@fumadocs/content-collections": "1.1.8"
+  },
+  "devDependencies": {
+    "@types/node": "22.14.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
+    "typescript": "^5.8.2",
+    "@types/mdx": "^2.0.13",
+    "@tailwindcss/postcss": "^4.1.1",
+    "tailwindcss": "^4.1.1",
+    "postcss": "^8.5.3",
+    "eslint": "^8",
+    "eslint-config-next": "15.2.4"
+  }
+}
