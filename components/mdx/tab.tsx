@@ -66,7 +66,26 @@ export function Tabs({ children, className, items, ...props }: TabsProps) {
   )
 }
 
-export function Tab({ children, value }: TabProps) {
-  // Tab组件是容器，但保留value属性以便在Tabs中使用
+export function Tab({ children }: TabProps) {
   return <>{children}</>
+}
+
+export function TabDescription({
+  children,
+  accessibilityTitle,
+}: React.PropsWithChildren<{
+  accessibilityTitle?: string
+}>) {
+  return (
+    <div
+      id="content-wrapper"
+      className="prose relative z-10 mb-10 max-w-3xl"
+      data-content="true"
+    >
+      <h3 data-title="true" className="sr-only">
+        {accessibilityTitle}
+      </h3>
+      {children}
+    </div>
+  )
 }

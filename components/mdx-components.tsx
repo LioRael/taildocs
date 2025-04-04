@@ -8,7 +8,7 @@ import {
   Steps,
   StepTitle,
 } from "./mdx/step"
-import { Tab, Tabs } from "./mdx/tab"
+import { Tab, TabDescription, Tabs } from "./mdx/tab"
 
 import type { motion } from "motion/react"
 import type { HTMLAttributes } from "react"
@@ -54,6 +54,9 @@ export const mdxComponents = {
 
   Tabs: (props: React.ComponentProps<typeof Tabs>) => <Tabs {...props} />,
   Tab: (props: React.ComponentProps<typeof Tab>) => <Tab {...props} />,
+  TabDescription: (props: React.ComponentProps<typeof TabDescription>) => (
+    <TabDescription {...props} />
+  ),
 
   Steps: (props: React.ComponentProps<typeof Steps>) => <Steps {...props} />,
   Step: (props: React.ComponentProps<typeof Step>) => <Step {...props} />,
