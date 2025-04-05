@@ -82,6 +82,7 @@ export default function TableOfContents({
                 {children.map(({ text: childText, slug: childSlug }, j) => (
                   <NavListItem key={j}>
                     <NavListLink
+                      data-nested
                       nested
                       aria-current={
                         activeSection === childSlug ? "location" : undefined

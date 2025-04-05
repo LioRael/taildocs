@@ -8,6 +8,8 @@ import { mdxComponents } from "@/components/mdx-components"
 import { cn } from "@/lib/cn"
 import { source } from "@/lib/source"
 
+import type { TOCEntry } from "@/components/docs/table-of-contents"
+import type { TableOfContents as TableOfContentsType } from "fumadocs-core/server"
 import type { Metadata } from "next"
 
 export default async function Page(props: {
@@ -62,20 +64,45 @@ export default async function Page(props: {
         {!page.data.full && (
           <div className="max-xl:hidden">
             <div className="sticky top-14 max-h-[calc(100svh-3.5rem)] overflow-x-hidden px-6 pt-10 pb-24">
-              <TableOfContents
-                tableOfContents={page.data.toc.map((item) => ({
-                  level: item.depth,
-                  text: item.title,
-                  slug: item.url,
-                  children: [],
-                }))}
-              />
+              <TableOfContents tableOfContents={mapTOC(page.data.toc)} />
             </div>
           </div>
         )}
       </div>
     </>
   )
+}
+
+function mapTOC(toc: TableOfContentsType) {
+  const result: Array<TOCEntry> = []
+  const stack: Array<TOCEntry> = []
+
+  for (const item of toc) {
+    const entry: TOCEntry = {
+      level: item.depth,
+      text: item.title as string,
+      slug: item.url,
+      children: [],
+    }
+
+    // 清空栈，直到找到当前条目的父级
+    while (stack.length > 0 && stack[stack.length - 1].level >= entry.level) {
+      stack.pop()
+    }
+
+    if (stack.length === 0) {
+      // 如果栈为空，则将条目添加到结果中
+      result.push(entry)
+    } else {
+      // 否则将其添加为栈顶条目的子项
+      stack[stack.length - 1].children.push(entry)
+    }
+
+    // 将当前条目添加到栈中
+    stack.push(entry)
+  }
+
+  return result
 }
 
 export function generateStaticParams() {
