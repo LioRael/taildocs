@@ -80,7 +80,9 @@ function HeaderNav() {
   return (
     <div className="flex items-center gap-6 max-md:hidden">
       <SearchButton />
-      <HeaderNavItem href="/docs">Docs</HeaderNavItem>
+      <HeaderNavItem href="/docs/getting-started/installation">
+        Docs
+      </HeaderNavItem>
       <HeaderNavItem href="/blog">Blog</HeaderNavItem>
       <HeaderNavItem href="/showcase">Showcase</HeaderNavItem>
       <CornerDecorationButton>Plus</CornerDecorationButton>
