@@ -46,7 +46,13 @@ export function ProseWrapper({
   )
 }
 
+export type GroupItem = {
+  label: string
+  href: string
+  items?: Array<GroupItem>
+}
+
 export type Group = {
   label: string
-  items: Array<{ label: string; href: string }>
+  items: Array<GroupItem>
 }

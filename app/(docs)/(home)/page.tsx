@@ -1,8 +1,7 @@
 import { Search } from "lucide-react"
 import Link from "next/link"
 
-import { Copyright } from "@/components/layout/copyright"
-import { Footer } from "@/components/layout/footer"
+import { FooterMeta, FooterSitemap } from "@/components/layout/footer"
 import { PatternBorder } from "@/components/layout/pattern-border"
 
 export default function HomePage() {
@@ -100,10 +99,10 @@ export default function HomePage() {
       </div>
       <PatternBorder className="row-span-full row-start-1 hidden md:col-start-3 md:block" />
       <div className="col-start-1 row-start-3 md:col-start-2 relative before:absolute before:top-0 before:h-px before:w-[200vw] before:bg-gray-950/5 dark:before:bg-white/10 before:-left-[100vw] after:absolute after:bottom-0 after:h-px after:w-[200vw] after:bg-gray-950/5 dark:after:bg-white/10 after:-left-[100vw]">
-        <Footer className="*:first:border-l-0 *:last:border-r-0" />
+        <FooterSitemap className="*:first:border-l-0 *:last:border-r-0" />
       </div>
       <div className="col-start-1 row-start-5 grid md:col-start-2">
-        <Copyright className="sm:gap-8 px-4 md:px-6 lg:px-8" />
+        <FooterMeta className="sm:gap-8 px-4 md:px-6 lg:px-8" />
       </div>
     </div>
   )

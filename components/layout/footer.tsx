@@ -1,17 +1,30 @@
+import clsx from "clsx"
+import Link from "next/link"
+
 import { cn } from "@/lib/cn"
 
-export function Footer({ className }: { className?: string }) {
+import { ThemeToggle } from "../theme-toggle"
+
+export function FooterSitemap({ className }: { className?: string }) {
   return (
     <footer className="bg-white text-sm/loose text-gray-950 dark:bg-gray-950 dark:text-white">
-      <div className={cn("mx-auto flex gap-4 p-4 md:hidden", className)}>
-        <MobileColumn>
-          <LearnGroup isMobile />
-          <ResourcesGroup isMobile />
-        </MobileColumn>
-        <MobileColumn>
-          <PlusGroup isMobile />
-          <CommunityGroup isMobile />
-        </MobileColumn>
+      <div className={cn("flex gap-4 p-4 md:hidden", className)}>
+        <div className="flex flex-1 flex-col gap-10">
+          <div>
+            <Learn />
+          </div>
+          <div>
+            <Resources />
+          </div>
+        </div>
+        <div className="flex flex-1 flex-col gap-10">
+          <div>
+            <TailwindPlus />
+          </div>
+          <div>
+            <Community />
+          </div>
+        </div>
       </div>
       <div
         className={cn(
@@ -19,127 +32,167 @@ export function Footer({ className }: { className?: string }) {
           className
         )}
       >
-        <LearnGroup />
-        <PlusGroup />
-        <ResourcesGroup />
-        <CommunityGroup />
+        <div className="border-x border-b border-gray-950/5 py-10 pl-2 not-md:border-0 md:border-b-0 dark:border-white/10">
+          <Learn />
+        </div>
+        <div className="border-x border-b border-gray-950/5 py-10 pl-2 not-md:border-0 md:border-b-0 dark:border-white/10">
+          <TailwindPlus />
+        </div>
+        <div className="border-x border-b border-gray-950/5 py-10 pl-2 not-md:border-0 sm:border-b-0 dark:border-white/10">
+          <Resources />
+        </div>
+        <div className="border-x border-gray-950/5 py-10 pl-2 not-md:border-0 dark:border-white/10">
+          <Community />
+        </div>
       </div>
     </footer>
   )
 }
 
-function Column({
-  isLast = false,
-  isMobile = false,
-  children,
-}: React.PropsWithChildren<{ isLast?: boolean; isMobile?: boolean }>) {
+export function FooterMeta({ className }: { className?: string }) {
   return (
-    <div
-      className={cn(
-        !isMobile &&
-          "border-x border-gray-950/5 py-10 pl-2 not-md:border-0 md:border-b-0 dark:border-white/10",
-        !isMobile && !isLast && "border-b sm:border-b-0"
-      )}
-    >
-      {children}
+    <div className="px-2 pt-10 pb-24">
+      <div
+        className={clsx(
+          "mx-auto flex w-full flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8",
+          className
+        )}
+      >
+        <ThemeToggle />
+        <div className="flex flex-col gap-4 text-sm/6 text-gray-700 sm:flex-row sm:gap-2 sm:pr-4 dark:text-gray-400">
+          <span>Copyright ©&nbsp;2025&nbsp;Tailwind Labs Inc.</span>
+          <span className="max-sm:hidden">&middot;</span>
+          <Link href="/brand" className="hover:underline">
+            Trademark Policy
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }
 
-function ColumnTitle({ children }: React.PropsWithChildren) {
-  return <h3 className="mb-2 font-semibold">{children}</h3>
-}
-
-function ColumnItemList({ children }: React.PropsWithChildren) {
-  return <ul className="mt-4 grid gap-4">{children}</ul>
-}
-
-function ColumnItem({ children }: React.PropsWithChildren) {
-  return <li>{children}</li>
-}
-
-function MobileColumn({ children }: React.PropsWithChildren) {
-  return <div className="flex flex-1 flex-col gap-10">{children}</div>
-}
-
-function LearnGroup({ isMobile }: { isMobile?: boolean }) {
+function Learn() {
   return (
-    <Column isMobile={isMobile}>
-      <ColumnTitle>Learn</ColumnTitle>
-      <ColumnItemList>
-        <ColumnItem>
-          <a href="/">Documentation</a>
-        </ColumnItem>
-        <ColumnItem>
-          <a href="/">Showcase</a>
-        </ColumnItem>
-        <ColumnItem>
-          <a href="/">Blog</a>
-        </ColumnItem>
-        <ColumnItem>
-          <a href="/">Playground</a>
-        </ColumnItem>
-      </ColumnItemList>
-    </Column>
+    <>
+      <h3 className="font-semibold">Learn</h3>
+      <ul className="mt-4 grid gap-4">
+        <li>
+          <Link href="/docs" className="hover:underline">
+            Documentation
+          </Link>
+        </li>
+        <li>
+          <Link href="/showcase" className="hover:underline">
+            Showcase
+          </Link>
+        </li>
+        <li>
+          <Link href="/blog" className="hover:underline">
+            Blog
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="https://play.tailwindcss.com/"
+            className="hover:underline"
+          >
+            Playground
+          </Link>
+        </li>
+      </ul>
+    </>
   )
 }
 
-function PlusGroup({ isMobile }: { isMobile?: boolean }) {
+function TailwindPlus() {
   return (
-    <Column isMobile={isMobile}>
-      <ColumnTitle>Tailwind Plus</ColumnTitle>
-      <ColumnItemList>
-        <ColumnItem>
-          <a href="/">UI Blocks</a>
-        </ColumnItem>
-        <ColumnItem>
-          <a href="/">Templates</a>
-        </ColumnItem>
-        <ColumnItem>
-          <a href="/">UI Kit</a>
-        </ColumnItem>
-      </ColumnItemList>
-    </Column>
+    <>
+      <h3 className="mb-2 font-semibold">
+        <a href="/plus?ref=footer" className="hover:underline">
+          Tailwind Plus
+        </a>
+      </h3>
+      <ul className="mt-4 grid gap-4">
+        <li>
+          <a href="/plus/ui-blocks?ref=footer" className="hover:underline">
+            UI Blocks
+          </a>
+        </li>
+        <li>
+          <a href="/plus/templates?ref=footer" className="hover:underline">
+            Templates
+          </a>
+        </li>
+        <li>
+          <a href="/plus/ui-kit?ref=footer" className="hover:underline">
+            UI Kit
+          </a>
+        </li>
+      </ul>
+    </>
   )
 }
 
-function ResourcesGroup({ isMobile }: { isMobile?: boolean }) {
+function Resources() {
   return (
-    <Column isMobile={isMobile}>
-      <ColumnTitle>Resources</ColumnTitle>
-      <ColumnItemList>
-        <ColumnItem>
-          <a href="/">Refactoring UI</a>
-        </ColumnItem>
-        <ColumnItem>
-          <a href="/">Headless UI</a>
-        </ColumnItem>
-        <ColumnItem>
-          <a href="/">Heroicons</a>
-        </ColumnItem>
-        <ColumnItem>
-          <a href="/">Hero Patterns</a>
-        </ColumnItem>
-      </ColumnItemList>
-    </Column>
+    <>
+      <h3 className="font-semibold">Resources</h3>
+      <ul className="mt-4 grid gap-4">
+        <li>
+          <Link
+            href="https://www.refactoringui.com"
+            className="hover:underline"
+          >
+            Refactoring UI
+          </Link>
+        </li>
+        <li>
+          <Link href="https://headlessui.com" className="hover:underline">
+            Headless UI
+          </Link>
+        </li>
+        <li>
+          <Link href="https://heroicons.com" className="hover:underline">
+            Heroicons
+          </Link>
+        </li>
+        <li>
+          <Link href="https://heropatterns.com" className="hover:underline">
+            Hero Patterns
+          </Link>
+        </li>
+      </ul>
+    </>
   )
 }
 
-function CommunityGroup({ isMobile }: { isMobile?: boolean }) {
+function Community() {
   return (
-    <Column isMobile={isMobile} isLast>
-      <ColumnTitle>Community</ColumnTitle>
-      <ColumnItemList>
-        <ColumnItem>
-          <a href="/">GitHub</a>
-        </ColumnItem>
-        <ColumnItem>
-          <a href="/">Discord</a>
-        </ColumnItem>
-        <ColumnItem>
-          <a href="/">X</a>
-        </ColumnItem>
-      </ColumnItemList>
-    </Column>
+    <>
+      <h3 className="font-semibold">Community</h3>
+      <ul className="mt-4 grid gap-4">
+        <li>
+          <Link
+            href="https://github.com/tailwindlabs/tailwindcss"
+            className="hover:underline"
+          >
+            GitHub
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="https://tailwindcss.com/discord"
+            className="hover:underline"
+          >
+            Discord
+          </Link>
+        </li>
+        <li>
+          <Link href="https://x.com/tailwindcss" className="hover:underline">
+            X
+          </Link>
+        </li>
+      </ul>
+    </>
   )
 }

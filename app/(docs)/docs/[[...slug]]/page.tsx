@@ -1,12 +1,12 @@
 import { MDXContent } from "@content-collections/mdx/react"
 import { notFound, redirect } from "next/navigation"
 
-import { Copyright } from "@/components/layout/copyright"
+import { DocsSidebar } from "@/components/docs/sidebar"
+import { DocsSidebarAutoscroll } from "@/components/docs/sidebar-autoscroll"
 import { Divider } from "@/components/layout/divider"
-import { Footer } from "@/components/layout/footer"
+import { FooterMeta, FooterSitemap } from "@/components/layout/footer"
 import { Pagination } from "@/components/layout/pagination"
 import { PatternBorder } from "@/components/layout/pattern-border"
-import { Sidebar } from "@/components/layout/sidebar"
 import { ProseWrapper } from "@/components/layout/wrapper"
 import { mdxComponents } from "@/components/mdx-components"
 import { source } from "@/lib/source"
@@ -37,7 +37,15 @@ export default async function Page(props: {
 
   return (
     <div className="grid min-h-dvh grid-cols-1 grid-rows-[1fr_1px_auto_1px_auto] pt-26.25 lg:grid-cols-[var(--container-2xs)_2.5rem_minmax(0,1fr)_2.5rem] lg:pt-14.25 xl:grid-cols-[var(--container-2xs)_2.5rem_minmax(0,1fr)_2.5rem]">
-      <Sidebar groups={groups} />
+      <div className="relative col-start-1 row-span-full row-start-1 max-lg:hidden">
+        <div className="absolute inset-0">
+          <div className="sticky top-14.25 bottom-0 left-0 h-full max-h-[calc(100dvh-(var(--spacing)*14.25))] w-2xs overflow-y-auto p-6">
+            <DocsSidebarAutoscroll>
+              <DocsSidebar groups={groups} />
+            </DocsSidebarAutoscroll>
+          </div>
+        </div>
+      </div>
       <PatternBorder className="col-start-2 row-span-5 row-start-1 max-lg:hidden" />
       <ProseWrapper toc={!page.data.full ? page.data.toc : undefined}>
         <p className="flex items-center gap-2 font-mono text-xs/6 font-medium tracking-widest text-gray-600 uppercase dark:text-gray-400">
@@ -61,11 +69,11 @@ export default async function Page(props: {
 
       <Divider rowStart={2} />
       <div className="row-start-3 lg:col-start-3">
-        <Footer className="max-w-2xl lg:max-w-5xl" />
+        <FooterSitemap className="max-w-2xl lg:max-w-5xl" />
       </div>
       <Divider rowStart={4} />
       <div className="row-start-5 grid lg:col-start-3">
-        <Copyright className="max-w-2xl lg:max-w-5xl" />
+        <FooterMeta className="max-w-2xl lg:max-w-5xl" />
       </div>
     </div>
   )
