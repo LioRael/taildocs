@@ -1,5 +1,5 @@
 import { createMDXSource } from "@fumadocs/content-collections"
-import { allDocs, allMetas } from "content-collections"
+import { allBlogMetas, allBlogs, allDocs, allMetas } from "content-collections"
 import { loader } from "fumadocs-core/source"
 
 export const source = loader({
@@ -16,4 +16,9 @@ export const source = loader({
       return node
     },
   },
+})
+
+export const blogSource = loader({
+  baseUrl: "/blog",
+  source: createMDXSource(allBlogs, allBlogMetas),
 })
