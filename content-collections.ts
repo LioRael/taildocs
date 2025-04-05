@@ -7,8 +7,6 @@ import {
 import { rehypeCode } from "fumadocs-core/mdx-plugins"
 import { z } from "zod"
 
-import theme from "@/components/syntax-highlighter/theme.json"
-
 const docs = defineCollection({
   name: "docs",
   directory: "content/docs",
@@ -27,8 +25,8 @@ const docs = defineCollection({
           rehypeCode,
           {
             themes: {
-              light: theme,
-              dark: theme,
+              light: "vesper",
+              dark: "vesper",
             },
           },
         ],
