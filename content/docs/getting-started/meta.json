@@ -1,4 +1,4 @@
 {
   "title": "Getting started",
-  "pages": ["editor-setup", "compatibility", "upgrade-guide"]
+  "pages": ["installation", "editor-setup", "compatibility", "upgrade-guide"]
 }
