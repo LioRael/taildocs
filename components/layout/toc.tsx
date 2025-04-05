@@ -14,7 +14,6 @@ import { tv } from "tailwind-variants"
 import type { TableOfContents, TOCItemType } from "fumadocs-core/server"
 import type { ReactNode, RefObject } from "react"
 
-// 监听元素变化的Hook
 function useOnChange<T>(
   value: T,
   onChange: (newValue: T, oldValue: T | undefined) => void
@@ -29,7 +28,6 @@ function useOnChange<T>(
   }, [value, onChange])
 }
 
-// 用于观察锚点可见性的Hook
 function useAnchorObserver(
   headings: Array<string>,
   single = true
@@ -37,7 +35,6 @@ function useAnchorObserver(
   const [activeAnchors, setActiveAnchors] = useState<Array<string>>([])
   const activeAnchorsRef = useRef<Array<string>>([])
 
-  // 同步ref和state
   useEffect(() => {
     activeAnchorsRef.current = activeAnchors
   }, [activeAnchors])
@@ -53,7 +50,6 @@ function useAnchorObserver(
 
     if (elements.length === 0) return
 
-    // 页面滚动位置变化时的处理函数
     const handleScroll = () => {
       const scrollY = window.scrollY
       const documentHeight = document.documentElement.scrollHeight
@@ -61,16 +57,12 @@ function useAnchorObserver(
       const isNearTop = scrollY < 200
       const isNearBottom = scrollY + windowHeight > documentHeight - 200
 
-      // 没有激活的锚点时尝试基于滚动位置设置一个
       if (activeAnchorsRef.current.length === 0 && headings.length > 0) {
         if (isNearTop) {
-          // 接近顶部时激活第一个锚点
           setActiveAnchors([headings[0]])
         } else if (isNearBottom) {
-          // 接近底部时激活最后一个锚点
           setActiveAnchors([headings[headings.length - 1]])
         } else {
-          // 在页面中间位置时，查找最接近可视区域的元素
           const middleOfViewport = scrollY + windowHeight / 2
           let closestElement = elements[0]
           let minDistance = Infinity
@@ -93,9 +85,7 @@ function useAnchorObserver(
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // 记录是否有任何标题正在交叉
         let hasVisibleHeading = false
-        // 创建一个交叉中的标题ID数组
         const intersectingIds: Array<string> = []
 
         entries.forEach((entry) => {
@@ -123,15 +113,11 @@ function useAnchorObserver(
           }
         })
 
-        // 如果没有可见的标题，检查滚动位置
-        if (!hasVisibleHeading) {
-          handleScroll()
-        }
+        handleScroll()
       },
       {
-        // 调整观察区域，使其更容易捕获元素
         rootMargin: "-5% 0px -80% 0px",
-        threshold: [0, 0.1, 0.5, 1], // 多个阈值提高检测精度
+        threshold: [0, 0.1, 0.5, 1],
       }
     )
 
@@ -139,7 +125,6 @@ function useAnchorObserver(
       observer.observe(element)
     })
 
-    // 添加滚动事件监听，但使用节流函数减少调用频率
     let scrollTimeout: NodeJS.Timeout | null = null
     const throttledScrollHandler = () => {
       if (scrollTimeout === null) {
@@ -152,7 +137,6 @@ function useAnchorObserver(
 
     window.addEventListener("scroll", throttledScrollHandler, { passive: true })
 
-    // 初始检查
     setTimeout(handleScroll, 200)
 
     return () => {
@@ -160,18 +144,16 @@ function useAnchorObserver(
       window.removeEventListener("scroll", throttledScrollHandler)
       if (scrollTimeout) clearTimeout(scrollTimeout)
     }
-  }, [headings, single]) // 移除activeAnchors依赖，使用ref代替
+  }, [headings, single])
 
   return activeAnchors
 }
 
-// 上下文对象
 const ActiveAnchorContext = createContext<Array<string>>([])
 const ScrollContext = createContext<RefObject<HTMLElement | null>>({
   current: null,
 })
 
-// 获取所有可见锚点的ID
 function useActiveAnchors(): Array<string> {
   return useContext(ActiveAnchorContext)
 }
@@ -206,11 +188,10 @@ function AnchorProvider({
   const headings = useMemo(() => {
     return toc
       .map((item) => {
-        // 安全地处理URL，确保有#号
         const parts = item.url.split("#")
         return parts.length > 1 ? parts[1] : null
       })
-      .filter(Boolean) as Array<string> // 过滤掉null值
+      .filter(Boolean) as Array<string>
   }, [toc])
 
   return (
@@ -232,7 +213,6 @@ function TocItem({ item, children, minDepth }: TocItemProps) {
   const anchors = useActiveAnchors()
   const anchorRef = useRef<HTMLAnchorElement>(null)
 
-  // 从href中提取id部分，安全处理
   let id: string | undefined
   if (item.url.startsWith("#")) {
     id = item.url.slice(1)
@@ -241,7 +221,6 @@ function TocItem({ item, children, minDepth }: TocItemProps) {
     id = parts.length > 1 ? parts[1] : undefined
   }
 
-  // 只有当id存在时才检查是否活跃
   const isActive = id ? anchors.includes(id) : false
 
   useOnChange(isActive, (active) => {
@@ -292,7 +271,6 @@ function TocItem({ item, children, minDepth }: TocItemProps) {
   )
 }
 
-// 将TOC项目分组为嵌套结构
 interface TocGroup {
   item: TOCItemType
   children: Array<TocGroup>
@@ -314,15 +292,12 @@ function buildTocTree(toc: TableOfContents): {
   const minDepth = Math.min(...toc.map((item) => item.depth))
   const maxDepth = Math.max(...toc.map((item) => item.depth))
 
-  // 使用一个堆栈来跟踪当前的父项
   const stack: Array<{ item: TOCItemType; children: Array<TocGroup> }> = []
   const result: Array<TocGroup> = []
 
-  // 处理每个目录项
   for (const item of toc) {
     const node: TocGroup = { item, children: [] }
 
-    // 弹出所有深度大于或等于当前项的节点
     while (
       stack.length > 0 &&
       stack[stack.length - 1].item.depth >= item.depth
@@ -331,14 +306,11 @@ function buildTocTree(toc: TableOfContents): {
     }
 
     if (stack.length === 0) {
-      // 顶级项，直接添加到结果中
       result.push(node)
     } else {
-      // 子项，添加到当前父项的子节点中
       stack[stack.length - 1].children.push(node)
     }
 
-    // 将当前节点推入堆栈，作为后续更深层级项的父节点
     stack.push(node)
   }
 
