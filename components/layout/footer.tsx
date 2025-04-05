@@ -1,9 +1,9 @@
 import { cn } from "@/lib/cn"
 
-export function Footer() {
+export function Footer({ className }: { className?: string }) {
   return (
     <footer className="bg-white text-sm/loose text-gray-950 dark:bg-gray-950 dark:text-white">
-      <div className="flex max-w-2xl gap-4 p-4 md:hidden lg:max-w-5xl">
+      <div className={cn("mx-auto flex gap-4 p-4 md:hidden", className)}>
         <MobileColumn>
           <LearnGroup isMobile />
           <ResourcesGroup isMobile />
@@ -13,7 +13,12 @@ export function Footer() {
           <CommunityGroup isMobile />
         </MobileColumn>
       </div>
-      <div className="mx-auto hidden w-full max-w-2xl grid-cols-4 justify-between gap-y-0 md:grid md:grid-cols-4 md:gap-6 md:gap-x-4 lg:max-w-5xl lg:gap-8">
+      <div
+        className={cn(
+          "mx-auto hidden w-full grid-cols-4 justify-between gap-y-0 md:grid md:grid-cols-4 md:gap-6 md:gap-x-4 lg:gap-8",
+          className
+        )}
+      >
         <LearnGroup />
         <PlusGroup />
         <ResourcesGroup />
