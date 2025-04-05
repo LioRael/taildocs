@@ -37,7 +37,7 @@ export default async function Page(props: {
         className={cn(
           "mx-auto grid w-full max-w-2xl grid-cols-1 gap-10",
           full
-            ? "isolate pt-10 md:pb-24 xl:max-w-5xl"
+            ? "isolate md:pb-24 xl:max-w-5xl"
             : "xl:max-w-5xl xl:grid-cols-[minmax(0,1fr)_var(--container-2xs)]"
         )}
       >
@@ -49,12 +49,18 @@ export default async function Page(props: {
           >
             {title}
           </h1>
-          <p
-            data-description="true"
-            className="mt-6 text-base/7 text-gray-700 dark:text-gray-400"
-          >
-            {description}
-          </p>
+          {description?.split("\n").map((line, index) => (
+            <p
+              key={index}
+              data-description="true"
+              className={cn(
+                "mt-4 text-base/7 text-gray-700 dark:text-gray-400",
+                index === 0 && "mt-6"
+              )}
+            >
+              {line}
+            </p>
+          ))}
 
           <div className="prose mt-10" data-content="true">
             <MDXContent components={mdxComponents} code={page.data.body} />
