@@ -1,4 +1,4 @@
-import type { Group } from "@/components/layout/wrapper"
+import type { Group } from "@/components/docs/groups-provider"
 import type { PageTree } from "fumadocs-core/server"
 
 export function convertTreeToGroups(tree: PageTree.Root) {

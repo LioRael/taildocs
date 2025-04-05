@@ -7,7 +7,7 @@ import { FooterMeta, FooterSitemap } from "@/components/layout/footer"
 import { Header } from "@/components/layout/header"
 import { source } from "@/lib/source"
 
-import { convertTreeToGroups } from "./docs/utils"
+import { convertTreeToGroups } from "./utils"
 
 export default function Layout({
   children,
