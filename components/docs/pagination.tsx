@@ -1,6 +1,7 @@
 "use client"
 
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import Link from "next/link"
 
 import { useGroups } from "./groups-provider"
 
@@ -20,22 +21,24 @@ export function Pagination({ page }: { page: Page }) {
     <footer className="mt-16 text-sm leading-6">
       <div className="flex items-center justify-between gap-2 text-gray-700 dark:text-gray-200">
         {previousPage && (
-          <a
+          <Link
+            prefetch
             href={previousPage.href || "#"}
             className="group flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
           >
             <ChevronLeftIcon className="size-4 transition-transform group-hover:-translate-x-1 duration-300" />
             <span>{previousPage.label}</span>
-          </a>
+          </Link>
         )}
         {nextPage && (
-          <a
+          <Link
+            prefetch
             href={nextPage.href || "#"}
             className="ml-auto group flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
           >
             <span>{nextPage.label}</span>
             <ChevronRightIcon className="size-4 transition-transform group-hover:translate-x-1 duration-300" />
-          </a>
+          </Link>
         )}
       </div>
     </footer>
