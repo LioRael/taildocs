@@ -2,8 +2,6 @@ import { ThemeProvider } from "next-themes"
 import localFont from "next/font/local"
 import Script from "next/script"
 
-import type { ReactNode } from "react"
-
 import "./global.css"
 
 import type { Metadata } from "next"
