@@ -1,6 +1,7 @@
 "use client"
 
 import { Radio, RadioGroup } from "@base-ui-components/react"
+import { motion } from "motion/react"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
 
@@ -10,7 +11,16 @@ function ThemeToggleButton(props: React.ComponentProps<typeof Radio.Root>) {
       className="relative isolate size-10 p-1.5 sm:size-7 sm:p-0"
       {...props}
     >
-      <Radio.Indicator className="absolute inset-0 -z-10 rounded-full data-checked:bg-white data-checked:ring data-checked:inset-ring data-checked:ring-gray-950/10 data-checked:inset-ring-white/10 data-unchecked:hidden dark:data-checked:bg-gray-700 dark:data-checked:text-white dark:data-checked:ring-transparent" />
+      <Radio.Indicator
+        render={
+          <motion.span
+            layout
+            layoutId={`theme-toggle-indicator`}
+            transition={{ duration: 0.2 }}
+            className="absolute inset-0 -z-10 rounded-full data-checked:bg-white data-checked:ring data-checked:inset-ring data-checked:ring-gray-950/10 data-checked:inset-ring-white/10 data-unchecked:hidden dark:data-checked:bg-gray-700 dark:data-checked:text-white dark:data-checked:ring-transparent"
+          />
+        }
+      />
       {props.children}
     </Radio.Root>
   )
@@ -32,7 +42,7 @@ export function ThemeToggle() {
     <RadioGroup
       value={theme}
       onValueChange={(value) => setTheme(value as string)}
-      className="relative z-0 inline-grid grid-cols-3 gap-0.5 rounded-full bg-gray-950/5 p-0.75 text-gray-950 dark:bg-white/10 dark:text-white"
+      className="isolate relative z-0 inline-grid grid-cols-3 gap-0.5 rounded-full bg-gray-950/5 p-0.75 text-gray-950 dark:bg-white/10 dark:text-white"
     >
       <ThemeToggleButton aria-label="System theme" value="system">
         <svg viewBox="0 0 28 28" fill="none">
