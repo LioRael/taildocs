@@ -11,7 +11,7 @@ import {
 import { CornerDecorationButton } from "../ui/corner-decoration-button"
 import { DocsSidebarLink } from "./sidebar-link"
 
-import type { Group } from "../layout/wrapper"
+import type { Group } from "./groups-provider"
 
 export function TopNavLink(
   props: { href: string } & React.ComponentPropsWithoutRef<"a">
