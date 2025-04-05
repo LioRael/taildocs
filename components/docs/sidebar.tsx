@@ -148,7 +148,7 @@ export function DocsSidebar({ groups }: { groups: Array<Group> }) {
     <nav className="flex flex-col gap-8">
       <TopNav />
       {groups.map((group) => (
-        <NavList key={group.label} data-autoscroll>
+        <NavList key={group.label} name="sidebar" data-autoscroll>
           <NavListHeading>{group.label}</NavListHeading>
           <NavListItems>
             {group.items.map((item) => (

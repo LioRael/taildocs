@@ -1,7 +1,8 @@
 "use client"
 
 import { Tabs as BaseTabs } from "@base-ui-components/react"
-import React, { useState } from "react"
+import { motion } from "motion/react"
+import React, { useId } from "react"
 
 import { cn } from "@/lib/cn"
 
@@ -17,6 +18,7 @@ type TabProps = {
 }
 
 export function Tabs({ children, className, items, ...props }: TabsProps) {
+  const id = useId()
   const childrenArray = React.Children.toArray(children)
 
   const panels = childrenArray.map((child, index) => {
@@ -44,17 +46,26 @@ export function Tabs({ children, className, items, ...props }: TabsProps) {
                   <BaseTabs.Tab
                     key={item}
                     value={item}
+                    render={(tabProps, { selected }) => (
+                      <div {...tabProps}>
+                        {selected && (
+                          <motion.span
+                            className="bg-current w-full h-px bottom-0 absolute"
+                            layoutId={`tab-${id}`}
+                          />
+                        )}
+                        {item}
+                      </div>
+                    )}
                     className={(state) =>
                       cn(
-                        "-mb-px flex border-b pb-2 text-sm/7 font-medium cursor-pointer transition-colors",
+                        "relative -mb-px flex pb-2 text-sm/7 font-medium cursor-pointer transition-colors",
                         state.selected
-                          ? "border-current text-gray-950 dark:text-white"
-                          : "border-transparent text-gray-700 hover:border-gray-950/25 dark:text-gray-200 dark:hover:border-white/25"
+                          ? "text-gray-950 dark:text-white"
+                          : "border-b border-transparent text-gray-700 hover:border-gray-950/25 dark:text-gray-200 dark:hover:border-white/25"
                       )
                     }
-                  >
-                    {item}
-                  </BaseTabs.Tab>
+                  />
                 ))}
               </div>
             </div>

@@ -66,7 +66,7 @@ export default function TableOfContents({
   }, [])
 
   return (
-    <NavList>
+    <NavList name="toc">
       <NavListHeading>On this page</NavListHeading>
       <NavListItems data-toc="true">
         {tableOfContents.map(({ text, slug, children }, i) => (

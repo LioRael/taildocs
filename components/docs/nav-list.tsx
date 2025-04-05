@@ -1,10 +1,15 @@
 import clsx from "clsx"
+import { LayoutGroup, motion } from "motion/react"
 import Link from "next/link"
 
-export function NavList({ children, ...rest }: React.PropsWithChildren) {
+export function NavList({
+  children,
+  name,
+  ...rest
+}: React.PropsWithChildren<{ name: string }>) {
   return (
     <div className="flex flex-col gap-3" {...rest}>
-      {children}
+      <LayoutGroup id={name}>{children}</LayoutGroup>
     </div>
   )
 }
@@ -49,17 +54,33 @@ export function NavListLink({
   children,
   nested = false,
   ...props
-}: React.PropsWithChildren<{ href: string; nested?: boolean }>) {
+}: React.PropsWithChildren<{
+  href: string
+  nested?: boolean
+  "aria-current"?: "page" | "location"
+}>) {
+  const isActive = props["aria-current"] !== undefined
+
   return (
     <Link
+      aria-current={isActive}
       className={clsx(
-        "transition-colors inline-block border-l border-transparent text-base/8 text-gray-600 hover:border-gray-950/25 hover:text-gray-950 sm:text-sm/6 dark:text-gray-300 dark:hover:border-white/25 dark:hover:text-white",
-        "aria-[current]:border-gray-950 aria-[current]:font-semibold aria-[current]:text-gray-950 dark:aria-[current]:border-white dark:aria-[current]:text-white",
+        "relative transition-colors inline-block border-l border-transparent text-base/8 text-gray-600 hover:border-gray-950/25 hover:text-gray-950 sm:text-sm/6 dark:text-gray-300 dark:hover:border-white/25 dark:hover:text-white",
+        "aria-[current]:font-semibold aria-[current]:text-gray-950 dark:aria-[current]:text-white",
         nested ? "pl-8 sm:pl-7.5" : "pl-5 sm:pl-4"
       )}
       href={href}
       {...props}
     >
+      {isActive && (
+        <motion.span
+          layoutDependency={false}
+          layoutId="indicator"
+          className={clsx(
+            "absolute -left-px h-full w-px bg-gray-950 font-semibold text-gray-950 dark:bg-white dark:text-white"
+          )}
+        />
+      )}
       {children}
     </Link>
   )
