@@ -1,5 +1,4 @@
 import { MDXContent } from "@content-collections/mdx/react"
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import { notFound, redirect } from "next/navigation"
 
 import { NavFooter } from "@/components/layout/nav-footer"
