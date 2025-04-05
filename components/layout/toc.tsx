@@ -126,7 +126,7 @@ function useAnchorObserver(
           }
         })
 
-        if (!hasUpdated && activeAnchorsRef.current.length === 0) {
+        if (activeAnchorsRef.current.length === 0) {
           handleScroll()
         }
       },
