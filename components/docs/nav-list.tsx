@@ -77,7 +77,7 @@ export function NavListLink({
           layoutId="indicator"
           transition={{
             layout: {
-              duration: 0.2,
+              duration: props["aria-current"] === "page" ? 0 : 0.2,
               type: "spring",
               bounce: 0,
             },
