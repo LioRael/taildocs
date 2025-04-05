@@ -1,0 +1,66 @@
+---
+title: Upgrade guide
+description: |
+  Upgrading your Tailwind CSS projects from v3 to v4.
+---
+
+Tailwind CSS v4.0 is a new major version of the framework, so while we've worked really hard to minimize breaking changes, some updates are necessary. This guide outlines all the steps required to upgrade your projects from v3 to v4.
+
+**Tailwind CSS v4.0 is designed for Safari 16.4+, Chrome 111+, and Firefox 128+**. If you need to support older browsers, stick with v3.4 until your browser support requirements change.
+
+## Using the upgrade tool
+
+If you'd like to upgrade a project from v3 to v4, you can use our upgrade tool to do the vast majority of the heavy lifting for you:
+
+```sh title="Terminal"
+$ npx @tailwindcss/upgrade
+```
+
+For most projects, the upgrade tool will automate the entire migration process including updating your dependencies, migrating your configuration file to CSS, and handling any changes to your template files.
+
+The upgrade tool requires Node.js 20 or higher, so ensure your environment is updated before running it.
+
+**We recommend running the upgrade tool in a new branch**, then carefully reviewing the diff and testing your project in the browser to make sure all of the changes look correct. You may need to tweak a few things by hand in complex projects, but the tool will save you a ton of time either way.
+
+It's also a good idea to go over all of the [breaking changes](https://tailwindcss.com/docs/upgrade-guide#changes-from-v3) in v4 and get a good understanding of what's changed, in case there are other things you need to update in your project that the upgrade tool doesn't catch.
+
+## Upgrading manually
+
+### Using PostCSS
+
+In v3, the `tailwindcss` package was a PostCSS plugin, but in v4 the PostCSS plugin lives in a dedicated `@tailwindcss/postcss` package.
+
+Additionally, in v4 imports and vendor prefixing is now handled for you automatically, so you can remove `postcss-import` and `autoprefixer` if they are in your project:
+
+```js title="postcss.config.mjs"
+export default {
+  plugins: {
+    "postcss-import": {},
+    tailwindcss: {},
+    autoprefixer: {},
+    "@tailwindcss/postcss": {},
+  },
+}
+```
+
+### Using Vite
+
+If you're using Vite, we recommend migrating from the PostCSS plugin to our new dedicated Vite plugin for improved performance and the best developer experience:
+
+```ts title="vite.config.ts"
+import tailwindcss from "@tailwindcss/vite"
+import { defineConfig } from "vite"
+
+export default defineConfig({
+  plugins: [tailwindcss()],
+})
+```
+
+### Using Tailwind CLI
+
+In v4, Tailwind CLI lives in a dedicated `@tailwindcss/cli` package. Update any of your build commands to use the new package instead:
+
+```sh title="Terminal"
+npx tailwindcss -i input.css -o output.css
+npx @tailwindcss/cli -i input.css -o output.css
+```
