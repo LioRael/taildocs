@@ -59,11 +59,10 @@ export function NavListLink({
   nested?: boolean
   "aria-current"?: "page" | "location"
 }>) {
-  const isActive = props["aria-current"] !== undefined
-
   return (
     <Link
-      aria-current={isActive}
+      prefetch
+      aria-current={props["aria-current"]}
       className={clsx(
         "relative transition-colors inline-block border-l border-transparent text-base/8 text-gray-600 hover:border-gray-950/25 hover:text-gray-950 sm:text-sm/6 dark:text-gray-300 dark:hover:border-white/25 dark:hover:text-white",
         "aria-[current]:font-semibold aria-[current]:text-gray-950 dark:aria-[current]:text-white",
@@ -72,10 +71,17 @@ export function NavListLink({
       href={href}
       {...props}
     >
-      {isActive && (
+      {props["aria-current"] !== undefined && (
         <motion.span
           layoutDependency={false}
           layoutId="indicator"
+          transition={{
+            layout: {
+              duration: 0.2,
+              type: "spring",
+              bounce: 0,
+            },
+          }}
           className={clsx(
             "absolute -left-px h-full w-px bg-gray-950 font-semibold text-gray-950 dark:bg-white dark:text-white"
           )}
