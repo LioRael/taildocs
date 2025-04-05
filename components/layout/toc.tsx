@@ -56,32 +56,54 @@ function useAnchorObserver(
     // 页面滚动位置变化时的处理函数
     const handleScroll = () => {
       const scrollY = window.scrollY
+      const documentHeight = document.documentElement.scrollHeight
+      const windowHeight = window.innerHeight
+      const isNearTop = scrollY < 200
+      const isNearBottom = scrollY + windowHeight > documentHeight - 200
 
+      // 没有激活的锚点时尝试基于滚动位置设置一个
       if (activeAnchorsRef.current.length === 0 && headings.length > 0) {
-        // 如果没有激活的锚点，检查滚动位置并激活相应的锚点
-        const documentHeight = document.documentElement.scrollHeight
-        const windowHeight = window.innerHeight
-
-        // 接近顶部时激活第一个锚点
-        if (scrollY < 200) {
+        if (isNearTop) {
+          // 接近顶部时激活第一个锚点
           setActiveAnchors([headings[0]])
-        }
-        // 接近底部时激活最后一个锚点
-        else if (scrollY + windowHeight > documentHeight - 200) {
+        } else if (isNearBottom) {
+          // 接近底部时激活最后一个锚点
           setActiveAnchors([headings[headings.length - 1]])
+        } else {
+          // 在页面中间位置时，查找最接近可视区域的元素
+          const middleOfViewport = scrollY + windowHeight / 2
+          let closestElement = elements[0]
+          let minDistance = Infinity
+
+          elements.forEach((element) => {
+            const rect = element.getBoundingClientRect()
+            const elementMiddle = scrollY + rect.top + rect.height / 2
+            const distance = Math.abs(elementMiddle - middleOfViewport)
+
+            if (distance < minDistance) {
+              closestElement = element
+              minDistance = distance
+            }
+          })
+
+          setActiveAnchors([closestElement.id])
         }
       }
     }
 
     const observer = new IntersectionObserver(
       (entries) => {
+        // 记录是否有任何标题正在交叉
         let hasVisibleHeading = false
+        // 创建一个交叉中的标题ID数组
+        const intersectingIds: Array<string> = []
 
         entries.forEach((entry) => {
           const id = entry.target.id
 
           if (entry.isIntersecting) {
             hasVisibleHeading = true
+            intersectingIds.push(id)
 
             setActiveAnchors((anchors) => {
               if (single) {
@@ -101,12 +123,15 @@ function useAnchorObserver(
           }
         })
 
-        // 检查滚动位置
-        handleScroll()
+        // 如果没有可见的标题，检查滚动位置
+        if (!hasVisibleHeading) {
+          handleScroll()
+        }
       },
       {
-        rootMargin: "-10% 0px -70% 0px", // 调整观察区域，使其更容易捕获元素
-        threshold: 0,
+        // 调整观察区域，使其更容易捕获元素
+        rootMargin: "-5% 0px -80% 0px",
+        threshold: [0, 0.1, 0.5, 1], // 多个阈值提高检测精度
       }
     )
 
@@ -114,15 +139,26 @@ function useAnchorObserver(
       observer.observe(element)
     })
 
-    // 添加滚动事件监听
-    window.addEventListener("scroll", handleScroll, { passive: true })
+    // 添加滚动事件监听，但使用节流函数减少调用频率
+    let scrollTimeout: NodeJS.Timeout | null = null
+    const throttledScrollHandler = () => {
+      if (scrollTimeout === null) {
+        scrollTimeout = setTimeout(() => {
+          handleScroll()
+          scrollTimeout = null
+        }, 100)
+      }
+    }
+
+    window.addEventListener("scroll", throttledScrollHandler, { passive: true })
 
     // 初始检查
-    setTimeout(handleScroll, 100)
+    setTimeout(handleScroll, 200)
 
     return () => {
       observer.disconnect()
-      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("scroll", throttledScrollHandler)
+      if (scrollTimeout) clearTimeout(scrollTimeout)
     }
   }, [headings, single]) // 移除activeAnchors依赖，使用ref代替
 
