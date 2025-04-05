@@ -7,11 +7,9 @@ import type { TableOfContents } from "fumadocs-core/server"
 
 export function Wrapper({ children }: React.PropsWithChildren) {
   return (
-    <div className="isolate">
-      <div>
-        <Header />
-        {children}
-      </div>
+    <div>
+      <Header />
+      {children}
     </div>
   )
 }

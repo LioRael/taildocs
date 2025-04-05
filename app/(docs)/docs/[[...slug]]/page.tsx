@@ -1,17 +1,12 @@
 import { MDXContent } from "@content-collections/mdx/react"
 import { notFound, redirect } from "next/navigation"
 
-import { DocsSidebar } from "@/components/docs/sidebar"
-import { DocsSidebarAutoscroll } from "@/components/docs/sidebar-autoscroll"
-import { Divider } from "@/components/layout/divider"
-import { FooterMeta, FooterSitemap } from "@/components/layout/footer"
+import { SectionTitle } from "@/components/docs/section-title"
+import TableOfContents from "@/components/docs/table-of-contents"
 import { Pagination } from "@/components/layout/pagination"
-import { PatternBorder } from "@/components/layout/pattern-border"
-import { ProseWrapper } from "@/components/layout/wrapper"
 import { mdxComponents } from "@/components/mdx-components"
+import { cn } from "@/lib/cn"
 import { source } from "@/lib/source"
-
-import { convertTreeToGroups } from "../utils"
 
 import type { Metadata } from "next"
 
@@ -26,56 +21,60 @@ export default async function Page(props: {
   const page = source.getPage(params.slug)
   if (!page) notFound()
 
-  const groups = convertTreeToGroups(source.pageTree)
-
-  const allPages = groups.flatMap((group) => group.items)
-  const currentIndex = allPages.findIndex((item) => item.href === page.url)
-
-  const previousPage = currentIndex > 0 ? allPages[currentIndex - 1] : null
-  const nextPage =
-    currentIndex < allPages.length - 1 ? allPages[currentIndex + 1] : null
+  const title = page.data.title
+  const description = page.data.description
+  const slogan = page.data.slogan
+  const full = page.data.full
 
   return (
-    <div className="grid min-h-dvh grid-cols-1 grid-rows-[1fr_1px_auto_1px_auto] pt-26.25 lg:grid-cols-[var(--container-2xs)_2.5rem_minmax(0,1fr)_2.5rem] lg:pt-14.25 xl:grid-cols-[var(--container-2xs)_2.5rem_minmax(0,1fr)_2.5rem]">
-      <div className="relative col-start-1 row-span-full row-start-1 max-lg:hidden">
-        <div className="absolute inset-0">
-          <div className="sticky top-14.25 bottom-0 left-0 h-full max-h-[calc(100dvh-(var(--spacing)*14.25))] w-2xs overflow-y-auto p-6">
-            <DocsSidebarAutoscroll>
-              <DocsSidebar groups={groups} />
-            </DocsSidebarAutoscroll>
-          </div>
-        </div>
-      </div>
-      <PatternBorder className="col-start-2 row-span-5 row-start-1 max-lg:hidden" />
-      <ProseWrapper toc={!page.data.full ? page.data.toc : undefined}>
-        <p className="flex items-center gap-2 font-mono text-xs/6 font-medium tracking-widest text-gray-600 uppercase dark:text-gray-400">
-          {page.data.slogan ??
-            groups.find((group) =>
-              group.items.some((item) => item.href === page.url)
-            )?.label}
-        </p>
-        <h1 className="mt-2 text-3xl font-medium tracking-tight text-gray-950 dark:text-white">
-          {page.data.title}
-        </h1>
-        <p className="mt-6 text-base/7 whitespace-pre-line text-gray-700 dark:text-gray-400">
-          {page.data.description}
-        </p>
-        <div className="prose mt-10">
-          <MDXContent components={mdxComponents} code={page.data.body} />
-        </div>
-        <Pagination previousPage={previousPage} nextPage={nextPage} />
-      </ProseWrapper>
-      <PatternBorder className="col-start-4 row-span-5 row-start-1 max-lg:hidden" />
+    <>
+      {/* Add a placeholder div so the Next.js router can find the scrollable element. */}
+      <div hidden />
 
-      <Divider rowStart={2} />
-      <div className="row-start-3 lg:col-start-3">
-        <FooterSitemap className="max-w-2xl lg:max-w-5xl" />
+      <div
+        className={cn(
+          "mx-auto grid w-full max-w-2xl grid-cols-1 gap-10",
+          full
+            ? "isolate pt-10 md:pb-24 xl:max-w-5xl"
+            : "xl:max-w-5xl xl:grid-cols-[minmax(0,1fr)_var(--container-2xs)]"
+        )}
+      >
+        <div className="px-4 pt-10 pb-24 sm:px-6 xl:pr-0">
+          <SectionTitle url={page.url} slogan={slogan} />
+          <h1
+            data-title="true"
+            className="mt-2 text-3xl font-medium tracking-tight text-gray-950 dark:text-white"
+          >
+            {title}
+          </h1>
+          <p
+            data-description="true"
+            className="mt-6 text-base/7 text-gray-700 dark:text-gray-400"
+          >
+            {description}
+          </p>
+
+          <div className="prose mt-10" data-content="true">
+            <MDXContent components={mdxComponents} code={page.data.body} />
+          </div>
+          <Pagination page={page} />
+        </div>
+        {!page.data.full && (
+          <div className="max-xl:hidden">
+            <div className="sticky top-14 max-h-[calc(100svh-3.5rem)] overflow-x-hidden px-6 pt-10 pb-24">
+              <TableOfContents
+                tableOfContents={page.data.toc.map((item) => ({
+                  level: item.depth,
+                  text: item.title,
+                  slug: item.url,
+                  children: [],
+                }))}
+              />
+            </div>
+          </div>
+        )}
       </div>
-      <Divider rowStart={4} />
-      <div className="row-start-5 grid lg:col-start-3">
-        <FooterMeta className="max-w-2xl lg:max-w-5xl" />
-      </div>
-    </div>
+    </>
   )
 }
 

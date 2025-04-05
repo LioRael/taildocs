@@ -1,17 +1,21 @@
+"use client"
+
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
-interface PaginationItem {
-  label: string
-  href: string
-  slogan?: string
-}
+import { useGroups } from "../docs/groups-provider"
 
-interface PaginationProps {
-  previousPage: PaginationItem | null
-  nextPage: PaginationItem | null
-}
+import type { Page } from "fumadocs-core/source"
 
-export function Pagination({ previousPage, nextPage }: PaginationProps) {
+export function Pagination({ page }: { page: Page }) {
+  const groups = useGroups()
+
+  const allPages = groups.flatMap((group) => group.items)
+  const currentIndex = allPages.findIndex((item) => item.href === page.url)
+
+  const previousPage = currentIndex > 0 ? allPages[currentIndex - 1] : null
+  const nextPage =
+    currentIndex < allPages.length - 1 ? allPages[currentIndex + 1] : null
+
   return (
     <footer className="mt-16 text-sm leading-6">
       <div className="flex items-center justify-between gap-2 text-gray-700 dark:text-gray-200">
