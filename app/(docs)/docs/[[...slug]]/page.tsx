@@ -37,7 +37,7 @@ export default async function Page(props: {
         className={cn(
           "mx-auto grid w-full max-w-2xl grid-cols-1 gap-10",
           full
-            ? "isolate md:pb-24 xl:max-w-5xl"
+            ? "isolate xl:max-w-5xl"
             : "xl:max-w-5xl xl:grid-cols-[minmax(0,1fr)_var(--container-2xs)]"
         )}
       >
