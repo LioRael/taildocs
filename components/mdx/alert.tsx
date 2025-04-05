@@ -8,7 +8,7 @@ export function Alert({
       return React.cloneElement(child, {
         className:
           "m-0 flex-1 text-sm font-semibold text-gray-950 dark:text-white",
-      } as { className: string })
+      } as React.ComponentProps<typeof Alert>)
     }
     return child
   })

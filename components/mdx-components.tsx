@@ -1,3 +1,4 @@
+import { Alert } from "./mdx/alert"
 import { Anchor } from "./mdx/anchor"
 import { CodeBlock, Pre } from "./mdx/codeblock"
 import { Heading } from "./mdx/heading"
@@ -69,4 +70,6 @@ export const mdxComponents = {
   StepContent: (props: React.ComponentProps<typeof StepContent>) => (
     <StepContent {...props} />
   ),
+
+  Alert: (props: React.ComponentProps<typeof Alert>) => <Alert {...props} />,
 }
