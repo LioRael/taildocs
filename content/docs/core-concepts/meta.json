@@ -1,0 +1,14 @@
+{
+  "title": "Core concepts",
+  "pages": [
+    "styling-with-utility-classes",
+    "hover-focus-and-other-states",
+    "responsive-design",
+    "dark-mode",
+    "theme",
+    "colors",
+    "adding-custom-styles",
+    "detecting-classes-in-source-files",
+    "functions-and-directives"
+  ]
+}
