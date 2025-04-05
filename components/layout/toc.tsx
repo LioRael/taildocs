@@ -48,7 +48,7 @@ function useAnchorObserver(
     }
 
     const elements = headings
-      .map((id) => document.getElementById(id))
+      .map((id) => id && document.getElementById(id))
       .filter(Boolean) as Array<HTMLElement>
 
     if (elements.length === 0) return
@@ -57,7 +57,7 @@ function useAnchorObserver(
     const handleScroll = () => {
       const scrollY = window.scrollY
 
-      if (activeAnchorsRef.current.length === 0) {
+      if (activeAnchorsRef.current.length === 0 && headings.length > 0) {
         // 如果没有激活的锚点，检查滚动位置并激活相应的锚点
         const documentHeight = document.documentElement.scrollHeight
         const windowHeight = window.innerHeight
@@ -168,7 +168,13 @@ function AnchorProvider({
   children,
 }: AnchorProviderProps): React.ReactElement {
   const headings = useMemo(() => {
-    return toc.map((item) => item.url.split("#")[1])
+    return toc
+      .map((item) => {
+        // 安全地处理URL，确保有#号
+        const parts = item.url.split("#")
+        return parts.length > 1 ? parts[1] : null
+      })
+      .filter(Boolean) as Array<string> // 过滤掉null值
   }, [toc])
 
   return (
@@ -190,11 +196,17 @@ function TocItem({ item, children, minDepth }: TocItemProps) {
   const anchors = useActiveAnchors()
   const anchorRef = useRef<HTMLAnchorElement>(null)
 
-  // 从href中提取id部分
-  const id = item.url.startsWith("#")
-    ? item.url.slice(1)
-    : item.url.split("#")[1]
-  const isActive = anchors.includes(id)
+  // 从href中提取id部分，安全处理
+  let id: string | undefined
+  if (item.url.startsWith("#")) {
+    id = item.url.slice(1)
+  } else {
+    const parts = item.url.split("#")
+    id = parts.length > 1 ? parts[1] : undefined
+  }
+
+  // 只有当id存在时才检查是否活跃
+  const isActive = id ? anchors.includes(id) : false
 
   useOnChange(isActive, (active) => {
     const element = anchorRef.current
