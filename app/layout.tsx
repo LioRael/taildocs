@@ -2,7 +2,7 @@ import { ThemeProvider } from "next-themes"
 import localFont from "next/font/local"
 import Script from "next/script"
 
-import "./global.css"
+import "./styles/global.css"
 
 import type { Metadata } from "next"
 
