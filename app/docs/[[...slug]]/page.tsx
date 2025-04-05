@@ -1,7 +1,7 @@
 import { MDXContent } from "@content-collections/mdx/react"
 import { notFound, redirect } from "next/navigation"
 
-import { NavFooter } from "@/components/layout/nav-footer"
+import { Pagination } from "@/components/layout/pagination"
 import { ProseWrapper } from "@/components/layout/wrapper"
 import { mdxComponents } from "@/components/mdx-components"
 import { source } from "@/lib/source"
@@ -47,7 +47,7 @@ export default async function Page(props: {
       <div className="prose mt-10">
         <MDXContent components={mdxComponents} code={page.data.body} />
       </div>
-      <NavFooter previousPage={previousPage} nextPage={nextPage} />
+      <Pagination previousPage={previousPage} nextPage={nextPage} />
     </ProseWrapper>
   )
 }

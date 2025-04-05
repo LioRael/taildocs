@@ -1,17 +1,17 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
-interface NavItem {
+interface PaginationItem {
   label: string
   href: string
   slogan?: string
 }
 
-interface NavFooterProps {
-  previousPage: NavItem | null
-  nextPage: NavItem | null
+interface PaginationProps {
+  previousPage: PaginationItem | null
+  nextPage: PaginationItem | null
 }
 
-export function NavFooter({ previousPage, nextPage }: NavFooterProps) {
+export function Pagination({ previousPage, nextPage }: PaginationProps) {
   return (
     <footer className="mt-16 text-sm leading-6">
       <div className="flex items-center justify-between gap-2 text-gray-700 dark:text-gray-200">
