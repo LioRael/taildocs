@@ -2,7 +2,7 @@
 
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
-import { useGroups } from "../docs/groups-provider"
+import { useGroups } from "./groups-provider"
 
 import type { Page } from "fumadocs-core/source"
 
@@ -24,7 +24,7 @@ export function Pagination({ page }: { page: Page }) {
             href={previousPage.href || "#"}
             className="group flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
           >
-            <ChevronLeftIcon className="size-4" />
+            <ChevronLeftIcon className="size-4 transition-transform group-hover:-translate-x-1 duration-300" />
             <span>{previousPage.label}</span>
           </a>
         )}
@@ -34,7 +34,7 @@ export function Pagination({ page }: { page: Page }) {
             className="ml-auto group flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
           >
             <span>{nextPage.label}</span>
-            <ChevronRightIcon className="size-4" />
+            <ChevronRightIcon className="size-4 transition-transform group-hover:translate-x-1 duration-300" />
           </a>
         )}
       </div>

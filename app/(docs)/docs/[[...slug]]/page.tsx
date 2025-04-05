@@ -1,9 +1,9 @@
 import { MDXContent } from "@content-collections/mdx/react"
 import { notFound, redirect } from "next/navigation"
 
+import { Pagination } from "@/components/docs/pagination"
 import { SectionTitle } from "@/components/docs/section-title"
 import TableOfContents from "@/components/docs/table-of-contents"
-import { Pagination } from "@/components/layout/pagination"
 import { mdxComponents } from "@/components/mdx-components"
 import { cn } from "@/lib/cn"
 import { source } from "@/lib/source"
