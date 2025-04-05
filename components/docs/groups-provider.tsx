@@ -2,8 +2,16 @@
 
 import { createContext, useContext } from "react"
 
-import type { Group } from "../layout/wrapper"
+export type GroupItem = {
+  label: string
+  href: string
+  items?: Array<GroupItem>
+}
 
+export type Group = {
+  label: string
+  items: Array<GroupItem>
+}
 export const GroupsContext = createContext<Array<Group>>([])
 
 export function GroupsProvider({
