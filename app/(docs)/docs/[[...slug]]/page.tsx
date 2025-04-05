@@ -2,6 +2,7 @@ import { MDXContent } from "@content-collections/mdx/react"
 import { notFound, redirect } from "next/navigation"
 
 import { Pagination } from "@/components/docs/pagination"
+import { RandomPromo } from "@/components/docs/promo"
 import { SectionTitle } from "@/components/docs/section-title"
 import TableOfContents from "@/components/docs/table-of-contents"
 import { mdxComponents } from "@/components/mdx-components"
@@ -71,6 +72,7 @@ export default async function Page(props: {
           <div className="max-xl:hidden">
             <div className="sticky top-14 max-h-[calc(100svh-3.5rem)] overflow-x-hidden px-6 pt-10 pb-24">
               <TableOfContents tableOfContents={mapTOC(page.data.toc)} />
+              <RandomPromo />
             </div>
           </div>
         )}
