@@ -2,6 +2,8 @@
 
 import {
   createContext,
+  memo,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -34,6 +36,53 @@ function useAnchorObserver(
 ): Array<string> {
   const [activeAnchors, setActiveAnchors] = useState<Array<string>>([])
   const activeAnchorsRef = useRef<Array<string>>([])
+  const elementsRef = useRef<Array<HTMLElement>>([])
+  const observerRef = useRef<IntersectionObserver | null>(null)
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  const handleScroll = useCallback(() => {
+    const scrollY = window.scrollY
+    const documentHeight = document.documentElement.scrollHeight
+    const windowHeight = window.innerHeight
+    const isNearTop = scrollY < 200
+    const isNearBottom = scrollY + windowHeight > documentHeight - 200
+
+    if (activeAnchorsRef.current.length > 0 || headings.length === 0) {
+      return
+    }
+
+    if (isNearTop) {
+      setActiveAnchors([headings[0]])
+    } else if (isNearBottom) {
+      setActiveAnchors([headings[headings.length - 1]])
+    } else if (elementsRef.current.length > 0) {
+      const middleOfViewport = scrollY + windowHeight / 2
+      let closestElement = elementsRef.current[0]
+      let minDistance = Infinity
+
+      elementsRef.current.forEach((element) => {
+        const rect = element.getBoundingClientRect()
+        const elementMiddle = scrollY + rect.top + rect.height / 2
+        const distance = Math.abs(elementMiddle - middleOfViewport)
+
+        if (distance < minDistance) {
+          closestElement = element
+          minDistance = distance
+        }
+      })
+
+      setActiveAnchors([closestElement.id])
+    }
+  }, [headings])
+
+  const throttledScrollHandler = useCallback(() => {
+    if (scrollTimeoutRef.current === null) {
+      scrollTimeoutRef.current = setTimeout(() => {
+        handleScroll()
+        scrollTimeoutRef.current = null
+      }, 100)
+    }
+  }, [handleScroll])
 
   useEffect(() => {
     activeAnchorsRef.current = activeAnchors
@@ -50,101 +99,63 @@ function useAnchorObserver(
 
     if (elements.length === 0) return
 
-    const handleScroll = () => {
-      const scrollY = window.scrollY
-      const documentHeight = document.documentElement.scrollHeight
-      const windowHeight = window.innerHeight
-      const isNearTop = scrollY < 200
-      const isNearBottom = scrollY + windowHeight > documentHeight - 200
+    elementsRef.current = elements
 
-      if (activeAnchorsRef.current.length === 0 && headings.length > 0) {
-        if (isNearTop) {
-          setActiveAnchors([headings[0]])
-        } else if (isNearBottom) {
-          setActiveAnchors([headings[headings.length - 1]])
-        } else {
-          const middleOfViewport = scrollY + windowHeight / 2
-          let closestElement = elements[0]
-          let minDistance = Infinity
-
-          elements.forEach((element) => {
-            const rect = element.getBoundingClientRect()
-            const elementMiddle = scrollY + rect.top + rect.height / 2
-            const distance = Math.abs(elementMiddle - middleOfViewport)
-
-            if (distance < minDistance) {
-              closestElement = element
-              minDistance = distance
-            }
-          })
-
-          setActiveAnchors([closestElement.id])
-        }
-      }
+    if (observerRef.current) {
+      observerRef.current.disconnect()
     }
 
-    const observer = new IntersectionObserver(
+    observerRef.current = new IntersectionObserver(
       (entries) => {
-        let hasVisibleHeading = false
-        const intersectingIds: Array<string> = []
+        let hasUpdated = false
 
         entries.forEach((entry) => {
           const id = entry.target.id
 
           if (entry.isIntersecting) {
-            hasVisibleHeading = true
-            intersectingIds.push(id)
-
-            setActiveAnchors((anchors) => {
+            if (!hasUpdated) {
+              hasUpdated = true
               if (single) {
-                return [id]
+                setActiveAnchors([id])
+              } else if (!activeAnchorsRef.current.includes(id)) {
+                setActiveAnchors((prev) => [...prev, id])
               }
-
-              if (!anchors.includes(id)) {
-                return [...anchors, id]
-              }
-
-              return anchors
-            })
+            }
           } else if (activeAnchorsRef.current.includes(id)) {
-            setActiveAnchors((anchors) =>
-              anchors.filter((anchor) => anchor !== id)
-            )
+            setActiveAnchors((prev) => prev.filter((anchor) => anchor !== id))
           }
         })
 
-        handleScroll()
+        if (!hasUpdated && activeAnchorsRef.current.length === 0) {
+          handleScroll()
+        }
       },
       {
         rootMargin: "-5% 0px -80% 0px",
-        threshold: [0, 0.1, 0.5, 1],
+        threshold: [0, 0.1, 0.5],
       }
     )
 
     elements.forEach((element) => {
-      observer.observe(element)
-    })
-
-    let scrollTimeout: NodeJS.Timeout | null = null
-    const throttledScrollHandler = () => {
-      if (scrollTimeout === null) {
-        scrollTimeout = setTimeout(() => {
-          handleScroll()
-          scrollTimeout = null
-        }, 100)
+      if (observerRef.current) {
+        observerRef.current.observe(element)
       }
-    }
+    })
 
     window.addEventListener("scroll", throttledScrollHandler, { passive: true })
 
     setTimeout(handleScroll, 200)
 
     return () => {
-      observer.disconnect()
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+      }
       window.removeEventListener("scroll", throttledScrollHandler)
-      if (scrollTimeout) clearTimeout(scrollTimeout)
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current)
+      }
     }
-  }, [headings, single])
+  }, [headings, single, handleScroll, throttledScrollHandler])
 
   return activeAnchors
 }
@@ -208,7 +219,11 @@ interface TocItemProps {
   maxDepth: number
 }
 
-function TocItem({ item, children, minDepth }: TocItemProps) {
+const TocItem = memo(function TocItem({
+  item,
+  children,
+  minDepth,
+}: TocItemProps) {
   const containerRef = useContext(ScrollContext)
   const anchors = useActiveAnchors()
   const anchorRef = useRef<HTMLAnchorElement>(null)
@@ -238,27 +253,29 @@ function TocItem({ item, children, minDepth }: TocItemProps) {
     }
   })
 
-  const className = tv({
-    base: "inline-block border-l transition-colors border-transparent text-base/8 text-gray-600 hover:border-gray-950/25 hover:text-gray-950 aria-[current]:border-gray-950 aria-[current]:font-semibold aria-[current]:text-gray-950 sm:text-sm/6 dark:text-gray-300 dark:hover:border-white/25 dark:hover:text-white dark:aria-[current]:border-white dark:aria-[current]:text-white",
-    variants: {
-      depth: {
-        [minDepth]: "pl-5 sm:pl-4",
-        [minDepth + 1]: "pl-8 sm:pl-7.5",
-        [minDepth + 2]: "pl-11 sm:pl-10",
-        [minDepth + 3]: "pl-14 sm:pl-13",
-        [minDepth + 4]: "pl-18 sm:pl-17",
+  const classNameValue = useMemo(() => {
+    return tv({
+      base: "inline-block border-l transition-colors border-transparent text-base/8 text-gray-600 hover:border-gray-950/25 hover:text-gray-950 aria-[current]:border-gray-950 aria-[current]:font-semibold aria-[current]:text-gray-950 sm:text-sm/6 dark:text-gray-300 dark:hover:border-white/25 dark:hover:text-white dark:aria-[current]:border-white dark:aria-[current]:text-white",
+      variants: {
+        depth: {
+          [minDepth]: "pl-5 sm:pl-4",
+          [minDepth + 1]: "pl-8 sm:pl-7.5",
+          [minDepth + 2]: "pl-11 sm:pl-10",
+          [minDepth + 3]: "pl-14 sm:pl-13",
+          [minDepth + 4]: "pl-18 sm:pl-17",
+        },
       },
-    },
-    defaultVariants: {
-      depth: 2,
-    },
-  })
+      defaultVariants: {
+        depth: 2,
+      },
+    })({ depth: item.depth })
+  }, [minDepth, item.depth])
 
   return (
     <li className="-ml-px flex flex-col items-start gap-2">
       <a
         ref={anchorRef}
-        className={className({ depth: item.depth })}
+        className={classNameValue}
         type="button"
         href={item.url}
         data-active={isActive}
@@ -269,7 +286,7 @@ function TocItem({ item, children, minDepth }: TocItemProps) {
       {children}
     </li>
   )
-}
+})
 
 interface TocGroup {
   item: TOCItemType
@@ -321,7 +338,7 @@ function buildTocTree(toc: TableOfContents): {
   }
 }
 
-function TocList({
+const TocList = memo(function TocList({
   items,
   isRoot = false,
   minDepth,
@@ -332,9 +349,11 @@ function TocList({
   minDepth: number
   maxDepth: number
 }) {
-  const className = isRoot
-    ? "flex flex-col gap-2 border-l dark:border-[color-mix(in_oklab,_var(--color-gray-950),white_20%)] border-[color-mix(in_oklab,_var(--color-gray-950),white_90%)]"
-    : "flex flex-col gap-2 border-l dark:border-[color-mix(in_oklab,_var(--color-gray-950),white_20%)] border-transparent"
+  const className = useMemo(() => {
+    return isRoot
+      ? "flex flex-col gap-2 border-l dark:border-[color-mix(in_oklab,_var(--color-gray-950),white_20%)] border-[color-mix(in_oklab,_var(--color-gray-950),white_90%)]"
+      : "flex flex-col gap-2 border-l dark:border-[color-mix(in_oklab,_var(--color-gray-950),white_20%)] border-transparent"
+  }, [isRoot])
 
   return (
     <ul className={className}>
@@ -356,7 +375,7 @@ function TocList({
       ))}
     </ul>
   )
-}
+})
 
 export function Toc({ toc }: { toc: TableOfContents }) {
   const containerRef = useRef<HTMLDivElement>(null)
