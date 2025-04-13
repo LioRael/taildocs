@@ -1,7 +1,7 @@
 "use client";
 
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { EllipsisVertical, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import type React from "react";
 
 import { Dialog } from "@base-ui-components/react";
@@ -9,7 +9,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CornerDecorationButton } from "../ui/corner-decoration-button";
 import { IconButton } from "../ui/icon-button";
-import { MobileNav } from "./mobile-nav";
 import { VersionSelect } from "./version-select";
 
 export function Header() {
