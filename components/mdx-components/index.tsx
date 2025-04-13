@@ -1,15 +1,9 @@
-import { Alert } from "./mdx/alert";
-import { Anchor } from "./mdx/anchor";
-import { CodeBlock, Pre } from "./mdx/codeblock";
-import { Heading } from "./mdx/heading";
-import {
-	Step,
-	StepContent,
-	StepDescription,
-	StepTitle,
-	Steps,
-} from "./mdx/step";
-import { Tab, TabDescription, Tabs } from "./mdx/tab";
+import { Alert } from "./alert";
+import { Anchor } from "./anchor";
+import { CodeBlock, Pre } from "./codeblock";
+import { Heading } from "./heading";
+import { Step, StepContent, StepDescription, StepTitle, Steps } from "./step";
+import { Tab, TabDescription, Tabs } from "./tab";
 
 import type { motion } from "motion/react";
 import type { HTMLAttributes } from "react";

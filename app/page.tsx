@@ -1,7 +1,7 @@
+import { FooterMeta, FooterSitemap } from "@/components/docs/footer";
+import { Header } from "@/components/docs/header";
+import GridContainer from "@/components/home/grid-container";
 import Hero from "@/components/home/hero";
-import { FooterMeta, FooterSitemap } from "@/components/layout/footer";
-import GridContainer from "@/components/layout/grid-container";
-import { Header } from "@/components/layout/header";
 
 export default function Home() {
 	return (

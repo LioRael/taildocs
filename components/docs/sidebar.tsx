@@ -11,7 +11,8 @@ import {
 import { CornerDecorationButton } from "../ui/corner-decoration-button";
 import { DocsSidebarLink } from "./sidebar-link";
 
-import type { Group } from "./groups-provider";
+import type { Section } from "@/lib/section";
+import { sections } from "@/lib/source";
 
 export function TopNavLink(
 	props: { href: string } & React.ComponentPropsWithoutRef<"a">,
@@ -149,15 +150,15 @@ export function TopNav() {
 	);
 }
 
-export function DocsSidebar({ groups }: { groups: Array<Group> }) {
+export function DocsSidebar() {
 	return (
 		<nav className="flex flex-col gap-8">
 			<TopNav />
-			{groups.map((group) => (
-				<NavList key={group.label} name="sidebar" data-autoscroll>
-					<NavListHeading>{group.label}</NavListHeading>
+			{sections.map((section) => (
+				<NavList key={section.label} name="sidebar" data-autoscroll>
+					<NavListHeading>{section.label}</NavListHeading>
 					<NavListItems>
-						{group.items.map((item) => (
+						{section.items.map((item) => (
 							<NavListItem key={item.href}>
 								<DocsSidebarLink title={item.label} path={item.href} />
 

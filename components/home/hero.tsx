@@ -5,8 +5,8 @@ import { motion } from "motion/react";
 import type React from "react";
 import { useEffect, useState } from "react";
 
-import GridContainer from "../layout/grid-container";
 import cover from "./cover.png";
+import GridContainer from "./grid-container";
 import LinkButton from "./link-button";
 
 const SYMBOL = { color: "var(--color-slate-400)" };

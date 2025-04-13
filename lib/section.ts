@@ -1,29 +1,37 @@
-import type { Group } from "@/components/docs/groups-provider";
 import type { PageTree } from "fumadocs-core/server";
 
-export function convertTreeToGroups(tree: PageTree.Root) {
-	const groups: Array<Group> = [];
+export type SectionItem = {
+	label: string;
+	href: string;
+	items?: Array<SectionItem>;
+};
+
+export type Section = {
+	label: string;
+	items: Array<SectionItem>;
+};
+
+export function convertPageTreeToSection(tree: PageTree.Root) {
+	const sections: Array<Section> = [];
 
 	const processNode = (node: PageTree.Node | PageTree.Root) => {
 		if ("type" in node && node.type === "folder") {
-			const group: Group = {
+			const section: Section = {
 				label: String(node.name || ""),
 				items: [] as Array<{ label: string; href: string; slogan?: string }>,
 			};
 
-			// 处理文件夹的index页面
 			if ("index" in node && node.index) {
-				group.items.push({
+				section.items.push({
 					label: String(node.index.name || ""),
 					href: String(node.index.url || ""),
 				});
 			}
 
-			// 处理文件夹的子页面
 			if ("children" in node && Array.isArray(node.children)) {
 				for (const child of node.children) {
 					if ("type" in child && child.type === "page") {
-						group.items.push({
+						section.items.push({
 							label: String(child.name || ""),
 							href: String(child.url || ""),
 						});
@@ -33,8 +41,8 @@ export function convertTreeToGroups(tree: PageTree.Root) {
 				}
 			}
 
-			if (group.items.length > 0) {
-				groups.push(group);
+			if (section.items.length > 0) {
+				sections.push(section);
 			}
 		} else if ("children" in node && Array.isArray(node.children)) {
 			for (const child of node.children) {
@@ -44,5 +52,5 @@ export function convertTreeToGroups(tree: PageTree.Root) {
 	};
 
 	processNode(tree);
-	return groups;
+	return sections;
 }

@@ -1,4 +1,4 @@
-import { Header } from "@/components/layout/header";
+import { Header } from "@/components/docs/header";
 
 export const metadata = {
 	title: "404 Not Found",

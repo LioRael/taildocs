@@ -1,6 +1,7 @@
 import { createMDXSource } from "@fumadocs/content-collections";
 import { allBlogMetas, allBlogs, allDocs, allMetas } from "content-collections";
 import { loader } from "fumadocs-core/source";
+import { convertPageTreeToSection } from "./section";
 
 export const source = loader({
 	baseUrl: "/docs",
@@ -17,6 +18,8 @@ export const source = loader({
 		},
 	},
 });
+
+export const sections = convertPageTreeToSection(source.pageTree);
 
 export const blogSource = loader({
 	baseUrl: "/blog",

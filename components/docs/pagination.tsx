@@ -3,14 +3,14 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 
-import { useGroups } from "./groups-provider";
+import { useSections } from "./section-provider";
 
 import type { Page } from "fumadocs-core/source";
 
 export function Pagination({ page }: { page: Page }) {
-	const groups = useGroups();
+	const sections = useSections();
 
-	const allPages = groups.flatMap((group) => group.items);
+	const allPages = sections.flatMap((section) => section.items);
 	const currentIndex = allPages.findIndex((item) => item.href === page.url);
 
 	const previousPage = currentIndex > 0 ? allPages[currentIndex - 1] : null;

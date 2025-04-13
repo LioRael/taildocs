@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { cn } from "@/lib/cn";
 
-import { ThemeToggle } from "../theme-toggle";
+import { ThemeToggle } from "./theme-toggle";
 
 export function FooterSitemap({ className }: { className?: string }) {
 	return (
