@@ -1,29 +1,36 @@
-"use client"
+"use client";
 
-import { useLayoutEffect, useRef } from "react"
+import { useLayoutEffect, useRef } from "react";
 
 export function DocsSidebarAutoscroll({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode;
 }) {
-  const ref = useRef<HTMLDivElement>(null)
+	const ref = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
-    const element = ref.current
-    if (!element) return
+	// Define a more specific type for the non-standard method
+	interface ElementWithScrollIntoViewIfNeeded extends Element {
+		scrollIntoViewIfNeeded(): void;
+	}
 
-    const activeLink = element.querySelector(
-      "[data-autoscroll] [aria-current=page]"
-    )
-    if (!activeLink) return
+	useLayoutEffect(() => {
+		const element = ref.current;
+		if (!element) return;
 
-    if ("scrollIntoViewIfNeeded" in activeLink) {
-      ;(activeLink as any).scrollIntoViewIfNeeded()
-    } else {
-      activeLink.scrollIntoView()
-    }
-  }, [])
+		const activeLink = element.querySelector(
+			"[data-autoscroll] [aria-current=page]",
+		);
+		if (!activeLink) return;
 
-  return <div ref={ref}>{children}</div>
+		if ("scrollIntoViewIfNeeded" in activeLink) {
+			(
+				activeLink as ElementWithScrollIntoViewIfNeeded
+			).scrollIntoViewIfNeeded();
+		} else {
+			activeLink.scrollIntoView();
+		}
+	}, []);
+
+	return <div ref={ref}>{children}</div>;
 }

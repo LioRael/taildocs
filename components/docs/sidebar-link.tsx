@@ -1,27 +1,27 @@
-"use client"
+"use client";
 
-import { usePathname } from "next/navigation"
+import { usePathname } from "next/navigation";
 
-import { NavListLink } from "@/components/docs/nav-list"
+import { NavListLink } from "@/components/docs/nav-list";
 
 export function DocsSidebarLink({
-  title,
-  path,
-  nested = false,
+	title,
+	path,
+	nested = false,
 }: {
-  title: string
-  path: string
-  nested?: boolean
+	title: string;
+	path: string;
+	nested?: boolean;
 }) {
-  const pathname = usePathname()
+	const pathname = usePathname();
 
-  return (
-    <NavListLink
-      aria-current={pathname === path ? "page" : undefined}
-      href={path}
-      nested={nested}
-    >
-      {title}
-    </NavListLink>
-  )
+	return (
+		<NavListLink
+			aria-current={pathname === path ? "page" : undefined}
+			href={path}
+			nested={nested}
+		>
+			{title}
+		</NavListLink>
+	);
 }

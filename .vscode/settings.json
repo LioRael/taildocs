@@ -1,10 +1,10 @@
 {
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ],
-  "tailwindCSS.experimental.classRegex": [
-    ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
-  ]
+	"eslint.workingDirectories": [
+		{
+			"mode": "auto"
+		}
+	],
+	"tailwindCSS.experimental.classRegex": [
+		["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
+	]
 }
