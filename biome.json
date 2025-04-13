@@ -17,6 +17,7 @@
 			".turbo",
 			".vercel",
 			".github",
+			".content-collections",
 			"app/styles/global.css",
 			"app/styles/typography.css"
 		]

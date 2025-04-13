@@ -7,6 +7,7 @@ import { FooterMeta, FooterSitemap } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { source } from "@/lib/source";
 
+import { MobileNav } from "@/components/layout/mobile-docs-nav";
 import { convertTreeToGroups } from "./utils";
 
 export default function Layout({
@@ -19,6 +20,9 @@ export default function Layout({
 		<div>
 			<div className="fixed inset-x-0 top-0 z-10 border-b border-gray-950/5 dark:border-white/10">
 				<Header />
+				<MobileNav header={<Header />} breadcrumb={breadcrumb}>
+					<DocsSidebar groups={groups} />
+				</MobileNav>
 			</div>
 			<div className="grid min-h-dvh grid-cols-1 grid-rows-[1fr_1px_auto_1px_auto] pt-26.25 lg:grid-cols-[var(--container-2xs)_2.5rem_minmax(0,1fr)_2.5rem] lg:pt-14.25 xl:grid-cols-[var(--container-2xs)_2.5rem_minmax(0,1fr)_2.5rem]">
 				{/* Sidebar */}

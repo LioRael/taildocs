@@ -39,7 +39,7 @@ export function VersionSelect() {
 								transition={{
 									duration: open ? 0.2 : 0.1,
 								}}
-								className="mt-2 w-28 rounded-xl bg-white p-1 py-1 text-xs/7 font-medium text-gray-950 tabular-nums shadow-sm ring ring-gray-950/5 outline-none dark:bg-gray-950 dark:text-white dark:ring-white/10"
+								className="mt-2 w-28 rounded-xl bg-white p-1 py-1 text-xs/7 font-medium text-gray-950 tabular-nums shadow-sm ring ring-gray-950/5 outline-none dark:bg-gray-950 dark:text-white dark:ring-white/10 origin-top-left"
 							/>
 						}
 					>
